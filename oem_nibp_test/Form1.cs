@@ -1,4 +1,4 @@
-namespace oem_nibp_test
+﻿namespace oem_nibp_test
 {
     public partial class Form1 : Form, IMessageHandler
     {
@@ -7,6 +7,7 @@ namespace oem_nibp_test
         byte[] DataFromOEM = new byte[Constants.BytesInResponse];
         OEM_NIBP_Status Status;
         byte Error;
+        byte NextCommand;
 
         public event Action<Message> WindowsMessage;
         public Form1()
@@ -15,6 +16,7 @@ namespace oem_nibp_test
             USBPort = new USBserialPort(this, 115200);
             USBPort.ConnectionFailure += onConnectionFailure;
             USBPort.Connect();
+            labHeart.Text = "♥";
         }
         private void onConnectionFailure(Exception obj)
         {
@@ -86,16 +88,21 @@ namespace oem_nibp_test
                 }
                 USBPort.BytesRead = 0;
                 DecomposeData();
-                USBPort.WriteByte(Constants.OEM_NIBP_REQUEST);
             }
         }
 
         private void DecomposeData()
         {
+            if (DataFromOEM[Constants.Num_CheckSum] != GetCheckSum())
+            {
+//                return;
+            }
             labSys.Text = DataFromOEM[Constants.Num_SYS].ToString();
             labDia.Text = DataFromOEM[Constants.Num_DIA].ToString();
-            labCurrent.Text = DataFromOEM[Constants.Num_Current].ToString();
+            int CurrentPressure = 0x100 * Status.Man8 + DataFromOEM[Constants.Num_Current];
+            labCurrent.Text = CurrentPressure.ToString();
             Status = new(DataFromOEM[Constants.Num_Status]);
+            labHeart.Visible = Status.Pulse;
             Error = DataFromOEM[Constants.Num_Errors];
             byte addIndex = DataFromOEM[Constants.Num_AddIndex];
             if (addIndex == Constants.Add_Pulse)
@@ -106,31 +113,51 @@ namespace oem_nibp_test
             {
                 labMAP.Text = DataFromOEM[Constants.Num_Additional].ToString();
             }
+            labManometer.Visible = (DataFromOEM[Constants.Num_Settings] & Constants.Mask_Manometer) != 0;
+        }
+
+        private byte GetCheckSum()
+        {
+            byte sum = 0;
+            for (int i = 0; i < DataFromOEM.Length; i++)
+            {
+                sum += DataFromOEM[i];
+            }
+            return sum;
         }
 
         private void butRequest_Click(object sender, EventArgs e)
         {
-            USBPort.WriteByte(Constants.OEM_NIBP_REQUEST);
+            NextCommand = Constants.CMD_REQUEST;
         }
 
         private void butStart_Click(object sender, EventArgs e)
         {
-            USBPort.WriteByte(Constants.OEM_NIBP_START);
+            NextCommand = Constants.CMD_START;
         }
 
         private void butStop_Click(object sender, EventArgs e)
         {
-            USBPort.WriteByte(Constants.OEM_NIBP_STOP);
+            NextCommand = Constants.CMD_STOP;
         }
 
         private void butManometerOn_Click(object sender, EventArgs e)
         {
-            USBPort.WriteByte(Constants.OEM_NIBP_MAN_ON);
+            NextCommand = Constants.CMD_MAN_ON;
         }
 
         private void butManometerOff_Click(object sender, EventArgs e)
         {
-            USBPort.WriteByte(Constants.OEM_NIBP_MAN_OFF);
+            NextCommand = Constants.CMD_MAN_OFF;
+        }
+
+        private void timerSendCommand_Tick(object sender, EventArgs e)
+        {
+            USBPort.WriteByte(NextCommand);
+            if (NextCommand != Constants.CMD_REQUEST)
+            {
+                NextCommand = Constants.CMD_REQUEST;
+            }
         }
     }
 }
