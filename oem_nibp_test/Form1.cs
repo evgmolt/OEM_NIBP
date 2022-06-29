@@ -4,6 +4,9 @@ namespace oem_nibp_test
     {
         USBserialPort USBPort;
         bool Connected;
+        byte[] DataFromOEM = new byte[Constants.BytesInResponse];
+        OEM_NIBP_Status Status;
+        byte Error;
 
         public event Action<Message> WindowsMessage;
         public Form1()
@@ -65,16 +68,69 @@ namespace oem_nibp_test
             if (USBPort.PortHandle == null) return;
             if (!USBPort.PortHandle.IsOpen) return;
             int bytes = USBPort.BytesRead;
-            for (int i = 0; i < bytes; i++)
+            if (bytes > 0)
             {
-                listView1.Items.Add(USBPort.PortBuf[i].ToString());
+                listBox1.Items.Clear();
+                if (bytes != Constants.BytesInResponse)
+                {
+                    labDTError.Visible = true;
+                    return;
+                }
+
+                labDTError.Visible = false;
+                for (int i = 0; i < bytes; i++)
+                {
+                    byte value = USBPort.PortBuf[i];
+                    listBox1.Items.Add(value.ToString());
+                    DataFromOEM[i] = value;
+                }
+                USBPort.BytesRead = 0;
+                DecomposeData();
+                USBPort.WriteByte(Constants.OEM_NIBP_REQUEST);
             }
-            USBPort.BytesRead = 0;
+        }
+
+        private void DecomposeData()
+        {
+            labSys.Text = DataFromOEM[Constants.Num_SYS].ToString();
+            labDia.Text = DataFromOEM[Constants.Num_DIA].ToString();
+            labCurrent.Text = DataFromOEM[Constants.Num_Current].ToString();
+            Status = new(DataFromOEM[Constants.Num_Status]);
+            Error = DataFromOEM[Constants.Num_Errors];
+            byte addIndex = DataFromOEM[Constants.Num_AddIndex];
+            if (addIndex == Constants.Add_Pulse)
+            {
+                labPulse.Text = DataFromOEM[Constants.Num_Additional].ToString();
+            }
+            if (addIndex == Constants.Add_MAP)
+            {
+                labMAP.Text = DataFromOEM[Constants.Num_Additional].ToString();
+            }
         }
 
         private void butRequest_Click(object sender, EventArgs e)
         {
-            USBPort.WriteByte(77);
+            USBPort.WriteByte(Constants.OEM_NIBP_REQUEST);
+        }
+
+        private void butStart_Click(object sender, EventArgs e)
+        {
+            USBPort.WriteByte(Constants.OEM_NIBP_START);
+        }
+
+        private void butStop_Click(object sender, EventArgs e)
+        {
+            USBPort.WriteByte(Constants.OEM_NIBP_STOP);
+        }
+
+        private void butManometerOn_Click(object sender, EventArgs e)
+        {
+            USBPort.WriteByte(Constants.OEM_NIBP_MAN_ON);
+        }
+
+        private void butManometerOff_Click(object sender, EventArgs e)
+        {
+            USBPort.WriteByte(Constants.OEM_NIBP_MAN_OFF);
         }
     }
 }
