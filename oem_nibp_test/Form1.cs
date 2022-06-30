@@ -1,13 +1,19 @@
-﻿namespace oem_nibp_test
+﻿using oem_nibp_test.enums;
+
+namespace oem_nibp_test
 {
     public partial class Form1 : Form, IMessageHandler
     {
+        const byte BytesInResponse = 10;
         USBserialPort USBPort;
         bool Connected;
-        byte[] DataFromOEM = new byte[Constants.BytesInResponse];
+        byte[] DataFromOEM = new byte[BytesInResponse];
         OEM_NIBP_Status Status;
         byte Error;
         byte NextCommand;
+
+        //Masks for Settings
+        const byte Mask_Manometer = 0b00010000;
 
         public event Action<Message> WindowsMessage;
         public Form1()
@@ -72,7 +78,7 @@
             if (bytes > 0)
             {
                 listBox1.Items.Clear();
-                if (bytes != Constants.BytesInResponse)
+                if (bytes != BytesInResponse)
                 {
                     labDTError.Visible = true;
                     return;
@@ -92,17 +98,17 @@
 
         private void DecomposeData()
         {
-            if (DataFromOEM[(byte)Constants.ByteNum.CheckSum] != GetCheckSum())
+            if (DataFromOEM[(byte)ByteNum.CheckSum] != GetCheckSum())
             {
 //                return;
             }
-            labSys.Text = DataFromOEM[(byte)Constants.ByteNum.SYS].ToString();
-            labDia.Text = DataFromOEM[(byte)Constants.ByteNum.DIA].ToString();
-            int CurrentPressure = 0x100 * Status.Man8 + DataFromOEM[(byte)Constants.ByteNum.Current];
+            labSys.Text = DataFromOEM[(byte)ByteNum.SYS].ToString();
+            labDia.Text = DataFromOEM[(byte)ByteNum.DIA].ToString();
+            int CurrentPressure = 0x100 * Status.Man8 + DataFromOEM[(byte)ByteNum.Current];
             labCurrent.Text = CurrentPressure.ToString();
-            Status = new(DataFromOEM[(byte)Constants.ByteNum.Status]);
+            Status = new(DataFromOEM[(byte)ByteNum.Status]);
             labHeart.Visible = Status.Pulse;
-            Error = DataFromOEM[(byte)Constants.ByteNum.Errors];
+            Error = DataFromOEM[(byte)ByteNum.Errors];
             if (Error > 0)
             {
                 labError.Visible = true;
@@ -112,16 +118,16 @@
             {
                 labError.Visible = false;
             }
-            byte addIndex = DataFromOEM[(byte)Constants.ByteNum.AddIndex];
-            if (addIndex == (byte)Constants.AdditionalByteIs.Pulse)
+            byte addIndex = DataFromOEM[(byte)ByteNum.AddIndex];
+            if (addIndex == (byte)AdditionalByteIs.Pulse)
             {
-                labPulse.Text = DataFromOEM[(byte)Constants.ByteNum.Additional].ToString();
+                labPulse.Text = DataFromOEM[(byte)ByteNum.Additional].ToString();
             }
-            if (addIndex == (byte)Constants.AdditionalByteIs.MAP)
+            if (addIndex == (byte)AdditionalByteIs.MAP)
             {
-                labMAP.Text = DataFromOEM[(byte)Constants.ByteNum.Additional].ToString();
+                labMAP.Text = DataFromOEM[(byte)ByteNum.Additional].ToString();
             }
-            labManometer.Visible = (DataFromOEM[(byte)Constants.ByteNum.Settings] & Constants.Mask_Manometer) != 0;
+            labManometer.Visible = (DataFromOEM[(byte)ByteNum.Settings] & Mask_Manometer) != 0;
             labMeasurement.Text = Status.MeasurementStatus switch
             {
                 OEM_NIBP_Status.Ready => "Ready",
@@ -144,35 +150,35 @@
 
         private void butRequest_Click(object sender, EventArgs e)
         {
-            NextCommand = (byte)Constants.CMD.REQUEST;
+            NextCommand = (byte)CMD.REQUEST;
         }
 
         private void butStart_Click(object sender, EventArgs e)
         {
-            NextCommand = (byte)Constants.CMD.START;
+            NextCommand = (byte)CMD.START;
         }
 
         private void butStop_Click(object sender, EventArgs e)
         {
-            NextCommand = (byte)Constants.CMD.STOP;
+            NextCommand = (byte)CMD.STOP;
         }
 
         private void butManometerOn_Click(object sender, EventArgs e)
         {
-            NextCommand = (byte)Constants.CMD.MAN_ON;
+            NextCommand = (byte)CMD.MAN_ON;
         }
 
         private void butManometerOff_Click(object sender, EventArgs e)
         {
-            NextCommand = (byte)Constants.CMD.MAN_OFF;
+            NextCommand = (byte)CMD.MAN_OFF;
         }
 
         private void timerSendCommand_Tick(object sender, EventArgs e)
         {
             USBPort.WriteByte(NextCommand);
-            if (NextCommand != (byte)Constants.CMD.REQUEST)
+            if (NextCommand != (byte)CMD.REQUEST)
             {
-                NextCommand = (byte)Constants.CMD.REQUEST;
+                NextCommand = (byte)CMD.REQUEST;
             }
         }
     }

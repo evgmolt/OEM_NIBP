@@ -1,4 +1,5 @@
-﻿using System;
+﻿using oem_nibp_test.enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,12 +24,12 @@ namespace oem_nibp_test
         public const int Measurement = 3;
         public OEM_NIBP_Status(byte status)
         {
-            Pump =  (status & (byte)Constants.Mask.Pump) != 0;
-            Valve = (status & (byte)Constants.Mask.Valve) != 0;
-            Msr =   (status & (byte)Constants.Mask.Msr) != 0;
-            Pulse = (status & (byte)Constants.Mask.Pulse) != 0;
-            New =   (status & (byte)Constants.Mask.New) != 0;
-            Man8 =  (byte)(((status & (byte)Constants.Mask.Man8) != 0) ? 1 : 0);
+            Pump =  (status & (byte)Mask.Pump) != 0;
+            Valve = (status & (byte)Mask.Valve) != 0;
+            Msr =   (status & (byte)Mask.Msr) != 0;
+            Pulse = (status & (byte)Mask.Pulse) != 0;
+            New =   (status & (byte)Mask.New) != 0;
+            Man8 =  (byte)(((status & (byte)Mask.Man8) != 0) ? 1 : 0);
             status &= 0b111;
             MeasurementStatus = status switch
             {
