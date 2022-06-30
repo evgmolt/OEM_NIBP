@@ -92,17 +92,17 @@
 
         private void DecomposeData()
         {
-            if (DataFromOEM[Constants.Num_CheckSum] != GetCheckSum())
+            if (DataFromOEM[(byte)Constants.ByteNum.CheckSum] != GetCheckSum())
             {
 //                return;
             }
-            labSys.Text = DataFromOEM[Constants.Num_SYS].ToString();
-            labDia.Text = DataFromOEM[Constants.Num_DIA].ToString();
-            int CurrentPressure = 0x100 * Status.Man8 + DataFromOEM[Constants.Num_Current];
+            labSys.Text = DataFromOEM[(byte)Constants.ByteNum.SYS].ToString();
+            labDia.Text = DataFromOEM[(byte)Constants.ByteNum.DIA].ToString();
+            int CurrentPressure = 0x100 * Status.Man8 + DataFromOEM[(byte)Constants.ByteNum.Current];
             labCurrent.Text = CurrentPressure.ToString();
-            Status = new(DataFromOEM[Constants.Num_Status]);
+            Status = new(DataFromOEM[(byte)Constants.ByteNum.Status]);
             labHeart.Visible = Status.Pulse;
-            Error = DataFromOEM[Constants.Num_Errors];
+            Error = DataFromOEM[(byte)Constants.ByteNum.Errors];
             if (Error > 0)
             {
                 labError.Visible = true;
@@ -112,16 +112,16 @@
             {
                 labError.Visible = false;
             }
-            byte addIndex = DataFromOEM[Constants.Num_AddIndex];
-            if (addIndex == Constants.AddIsPulse)
+            byte addIndex = DataFromOEM[(byte)Constants.ByteNum.AddIndex];
+            if (addIndex == (byte)Constants.AdditionalByteIs.Pulse)
             {
-                labPulse.Text = DataFromOEM[Constants.Num_Additional].ToString();
+                labPulse.Text = DataFromOEM[(byte)Constants.ByteNum.Additional].ToString();
             }
-            if (addIndex == Constants.AddIsMAP)
+            if (addIndex == (byte)Constants.AdditionalByteIs.MAP)
             {
-                labMAP.Text = DataFromOEM[Constants.Num_Additional].ToString();
+                labMAP.Text = DataFromOEM[(byte)Constants.ByteNum.Additional].ToString();
             }
-            labManometer.Visible = (DataFromOEM[Constants.Num_Settings] & Constants.Mask_Manometer) != 0;
+            labManometer.Visible = (DataFromOEM[(byte)Constants.ByteNum.Settings] & Constants.Mask_Manometer) != 0;
             labMeasurement.Text = Status.MeasurementStatus switch
             {
                 OEM_NIBP_Status.Ready => "Ready",
@@ -144,35 +144,35 @@
 
         private void butRequest_Click(object sender, EventArgs e)
         {
-            NextCommand = Constants.CMD_REQUEST;
+            NextCommand = (byte)Constants.CMD.REQUEST;
         }
 
         private void butStart_Click(object sender, EventArgs e)
         {
-            NextCommand = Constants.CMD_START;
+            NextCommand = (byte)Constants.CMD.START;
         }
 
         private void butStop_Click(object sender, EventArgs e)
         {
-            NextCommand = Constants.CMD_STOP;
+            NextCommand = (byte)Constants.CMD.STOP;
         }
 
         private void butManometerOn_Click(object sender, EventArgs e)
         {
-            NextCommand = Constants.CMD_MAN_ON;
+            NextCommand = (byte)Constants.CMD.MAN_ON;
         }
 
         private void butManometerOff_Click(object sender, EventArgs e)
         {
-            NextCommand = Constants.CMD_MAN_OFF;
+            NextCommand = (byte)Constants.CMD.MAN_OFF;
         }
 
         private void timerSendCommand_Tick(object sender, EventArgs e)
         {
             USBPort.WriteByte(NextCommand);
-            if (NextCommand != Constants.CMD_REQUEST)
+            if (NextCommand != (byte)Constants.CMD.REQUEST)
             {
-                NextCommand = Constants.CMD_REQUEST;
+                NextCommand = (byte)Constants.CMD.REQUEST;
             }
         }
     }

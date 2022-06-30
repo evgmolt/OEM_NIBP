@@ -2,42 +2,52 @@
 {
     internal static class Constants
     {
-        internal const byte CMD_REQUEST = 0xA0;
-        internal const byte CMD_START = 0xA1;
-        internal const byte CMD_STOP = 0xA2;
-        internal const byte CMD_MAN_ON = 0xAC;
-        internal const byte CMD_MAN_OFF = 0xAD;
+        internal enum CMD : byte
+        {
+            REQUEST = 0xA0,
+            START = 0xA1,
+            STOP = 0xA2,
+            MAN_ON = 0xAC,
+            MAN_OFF = 0xAD,
+        }
 
-        internal const byte Num_Echo = 0;
-        internal const byte Num_SYS = 1;
-        internal const byte Num_DIA = 2;
-        internal const byte Num_Current = 3;
-        internal const byte Num_Status = 4;
-        internal const byte Num_Errors = 5;
-        internal const byte Num_Settings = 6;
-        internal const byte Num_AddIndex = 7;
-        internal const byte Num_Additional = 8;
-        internal const byte Num_CheckSum = 9;
-
+        internal enum ByteNum : byte
+        {
+            Echo,
+            SYS,
+            DIA,
+            Current,
+            Status,
+            Errors,
+            Settings,
+            AddIndex,
+            Additional,
+            CheckSum,
+        }
         internal const byte BytesInResponse = 10;
 
         //Masks for Status
-        internal const byte Mask_Pump  = 0b00000001;
-        internal const byte Mask_Valve = 0b00000010;
-        internal const byte Mask_Msr   = 0b00000100;
-        internal const byte Mask_Pulse = 0b00100000;
-        internal const byte Mask_New   = 0b01000000;
-        internal const byte Mask_Man8  = 0b10000000;
-
+        internal enum Mask : byte
+        {
+            Pump    = 0b00000001,
+            Valve   = 0b00000010,
+            Msr     = 0b00000100,
+            Pulse   = 0b00100000,
+            New     = 0b01000000,
+            Man8    = 0b10000000,
+        }
         //Masks for Settings
         internal const byte Mask_Manometer = 0b00010000;
 
-        internal const byte AddIsSerialHigh = 0;
-        internal const byte AddIsSerialLow  = 1;
-        internal const byte AddIsVersion    = 2;
-        internal const byte AddIsMode       = 4;
-        internal const byte AddIsStartPress = 5;
-        internal const byte AddIsMAP        = 6;
-        internal const byte AddIsPulse      = 7;
+        internal enum AdditionalByteIs : byte
+        {
+            SerialHigh = 0,
+            SerialLow = 1,
+            Version = 2,
+            Mode = 4,
+            StartPress = 5,
+            MAP = 6,
+            Pulse = 7,
+        }
     }
 }
