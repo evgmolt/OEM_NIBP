@@ -15,6 +15,12 @@ namespace oem_nibp_test
         public bool New;
         public byte Man8;
 
+        public int MeasurementStatus;
+
+        public const int Ready = 0;
+        public const int Calibration = 1;
+        public const int Pumping = 2;
+        public const int Measurement = 3;
         public OEM_NIBP_Status(byte status)
         {
             Pump = (status & Constants.Mask_Pump) != 0;
@@ -23,6 +29,14 @@ namespace oem_nibp_test
             Pulse = (status & Constants.Mask_Pulse) != 0;
             New = (status & Constants.Mask_New) != 0;
             Man8 = (byte)(((status & Constants.Mask_Man8) != 0) ? 1 : 0);
+            status &= 0b111;
+            MeasurementStatus = status switch
+            {
+                0b100 => Calibration,
+                0b111 => Pumping,
+                0b110 => Measurement,
+                _ => Ready,
+            };
         }
     }
 }

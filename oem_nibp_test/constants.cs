@@ -32,12 +32,12 @@
         //Masks for Settings
         internal const byte Mask_Manometer = 0b00010000;
 
-        internal const byte Add_SerialHigh = 0;
-        internal const byte Add_SerialLow  = 1;
-        internal const byte Add_Version    = 2;
-        internal const byte Add_Mode       = 4;
-        internal const byte Add_StartPress = 5;
-        internal const byte Add_MAP        = 6;
-        internal const byte Add_Pulse      = 7;
+        internal const byte AddIsSerialHigh = 0;
+        internal const byte AddIsSerialLow  = 1;
+        internal const byte AddIsVersion    = 2;
+        internal const byte AddIsMode       = 4;
+        internal const byte AddIsStartPress = 5;
+        internal const byte AddIsMAP        = 6;
+        internal const byte AddIsPulse      = 7;
     }
 }

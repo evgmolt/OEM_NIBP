@@ -63,7 +63,6 @@
             }
         }
 
-
         private void timerRead_Tick(object sender, EventArgs e)
         {
             if (USBPort == null) return;
@@ -104,16 +103,33 @@
             Status = new(DataFromOEM[Constants.Num_Status]);
             labHeart.Visible = Status.Pulse;
             Error = DataFromOEM[Constants.Num_Errors];
+            if (Error > 0)
+            {
+                labError.Visible = true;
+                labError.Text = "Error: " + Error.ToString();
+            }
+            else
+            {
+                labError.Visible = false;
+            }
             byte addIndex = DataFromOEM[Constants.Num_AddIndex];
-            if (addIndex == Constants.Add_Pulse)
+            if (addIndex == Constants.AddIsPulse)
             {
                 labPulse.Text = DataFromOEM[Constants.Num_Additional].ToString();
             }
-            if (addIndex == Constants.Add_MAP)
+            if (addIndex == Constants.AddIsMAP)
             {
                 labMAP.Text = DataFromOEM[Constants.Num_Additional].ToString();
             }
             labManometer.Visible = (DataFromOEM[Constants.Num_Settings] & Constants.Mask_Manometer) != 0;
+            labMeasurement.Text = Status.MeasurementStatus switch
+            {
+                OEM_NIBP_Status.Ready => "Ready",
+                OEM_NIBP_Status.Calibration => "Calibration",
+                OEM_NIBP_Status.Pumping => "Pumping",
+                OEM_NIBP_Status.Measurement => "Measurement",
+                _ => "Ready",
+            };
         }
 
         private byte GetCheckSum()

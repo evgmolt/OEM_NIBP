@@ -52,6 +52,8 @@
             this.labManometer = new System.Windows.Forms.Label();
             this.timerSendCommand = new System.Windows.Forms.Timer(this.components);
             this.labHeart = new System.Windows.Forms.Label();
+            this.labMeasurement = new System.Windows.Forms.Label();
+            this.labError = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // timerStatus
@@ -151,9 +153,9 @@
             this.label1.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.label1.Location = new System.Drawing.Point(169, 25);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(40, 25);
+            this.label1.Size = new System.Drawing.Size(46, 25);
             this.label1.TabIndex = 9;
-            this.label1.Text = "SIS";
+            this.label1.Text = "SYS";
             // 
             // label2
             // 
@@ -266,18 +268,42 @@
             this.labHeart.AutoSize = true;
             this.labHeart.Font = new System.Drawing.Font("Segoe UI", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.labHeart.ForeColor = System.Drawing.Color.Red;
-            this.labHeart.Location = new System.Drawing.Point(27, 303);
+            this.labHeart.Location = new System.Drawing.Point(27, 221);
             this.labHeart.Name = "labHeart";
             this.labHeart.Size = new System.Drawing.Size(78, 32);
             this.labHeart.TabIndex = 20;
             this.labHeart.Text = "label6";
             this.labHeart.Visible = false;
             // 
+            // labMeasurement
+            // 
+            this.labMeasurement.AutoSize = true;
+            this.labMeasurement.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.labMeasurement.Location = new System.Drawing.Point(171, 260);
+            this.labMeasurement.Name = "labMeasurement";
+            this.labMeasurement.Size = new System.Drawing.Size(66, 25);
+            this.labMeasurement.TabIndex = 21;
+            this.labMeasurement.Text = "Ready";
+            // 
+            // labError
+            // 
+            this.labError.AutoSize = true;
+            this.labError.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.labError.ForeColor = System.Drawing.Color.Red;
+            this.labError.Location = new System.Drawing.Point(397, 71);
+            this.labError.Name = "labError";
+            this.labError.Size = new System.Drawing.Size(41, 15);
+            this.labError.TabIndex = 22;
+            this.labError.Text = "Error: ";
+            this.labError.Visible = false;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.labError);
+            this.Controls.Add(this.labMeasurement);
             this.Controls.Add(this.labHeart);
             this.Controls.Add(this.labManometer);
             this.Controls.Add(this.labMAP);
@@ -330,5 +356,7 @@
         private Label labManometer;
         private System.Windows.Forms.Timer timerSendCommand;
         private Label labHeart;
+        private Label labMeasurement;
+        private Label labError;
     }
 }
