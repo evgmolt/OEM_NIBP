@@ -5,9 +5,9 @@ namespace oem_nibp_test
     public partial class Form1 : Form, IMessageHandler
     {
         const byte BytesInResponse = 10;
+        byte[] DataFromOEM = new byte[BytesInResponse];
         USBserialPort USBPort;
         bool Connected;
-        byte[] DataFromOEM = new byte[BytesInResponse];
         OEM_NIBP_Status Status;
         byte Error;
         byte NextCommand;

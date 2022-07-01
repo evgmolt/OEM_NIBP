@@ -268,7 +268,7 @@
             this.labHeart.AutoSize = true;
             this.labHeart.Font = new System.Drawing.Font("Segoe UI", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.labHeart.ForeColor = System.Drawing.Color.Red;
-            this.labHeart.Location = new System.Drawing.Point(27, 221);
+            this.labHeart.Location = new System.Drawing.Point(27, 269);
             this.labHeart.Name = "labHeart";
             this.labHeart.Size = new System.Drawing.Size(78, 32);
             this.labHeart.TabIndex = 20;
