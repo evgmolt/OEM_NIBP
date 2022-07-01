@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace oem_nibp_test.enums
 {
+    //Номер байта в посылке
     internal enum ByteNum : byte
     {
         Echo,

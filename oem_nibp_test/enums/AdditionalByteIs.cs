@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace oem_nibp_test.enums
 {
+    //Индекс дополнительного байта
     internal enum AdditionalByteIs : byte
     {
         SerialHigh = 0,

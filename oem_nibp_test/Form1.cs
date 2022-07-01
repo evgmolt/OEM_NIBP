@@ -153,26 +153,31 @@ namespace oem_nibp_test
         private void butRequest_Click(object sender, EventArgs e)
         {
             NextCommand = (byte)CMD.REQUEST;
+            timerSendCommand.Enabled = true;
         }
 
         private void butStart_Click(object sender, EventArgs e)
         {
             NextCommand = (byte)CMD.START;
+            timerSendCommand.Enabled = true;
         }
 
         private void butStop_Click(object sender, EventArgs e)
         {
             NextCommand = (byte)CMD.STOP;
+            timerSendCommand.Enabled = true;
         }
 
         private void butManometerOn_Click(object sender, EventArgs e)
         {
             NextCommand = (byte)CMD.MAN_ON;
+            timerSendCommand.Enabled = true;
         }
 
         private void butManometerOff_Click(object sender, EventArgs e)
         {
             NextCommand = (byte)CMD.MAN_OFF;
+            timerSendCommand.Enabled = true;
         }
 
         private void timerSendCommand_Tick(object sender, EventArgs e)
@@ -182,6 +187,8 @@ namespace oem_nibp_test
             {
                 NextCommand = (byte)CMD.REQUEST;
             }
+            timerSendCommand.Enabled = cbAutoRequest.Checked;
+
         }
     }
 }

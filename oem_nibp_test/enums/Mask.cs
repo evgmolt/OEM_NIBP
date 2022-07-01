@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace oem_nibp_test.enums
 {
-    //Masks for Status
+    //Маски для Status
     [Flags]
     internal enum Mask : byte
     {

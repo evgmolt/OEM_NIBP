@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace oem_nibp_test.enums
 {
+    //Команды модулю
     internal enum CMD : byte
     {
         REQUEST = 0xA0,
