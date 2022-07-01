@@ -24,12 +24,14 @@ namespace oem_nibp_test
             USBPort.Connect();
             labHeart.Text = "♥";
         }
+
         private void onConnectionFailure(Exception obj)
         {
             MessageBoxButtons but = MessageBoxButtons.OK;
             MessageBoxIcon icon = MessageBoxIcon.Error;
             MessageBox.Show("Connection failure", "Error", but, icon);
         }
+
         protected override void WndProc(ref Message m)
         {
             const int WM_DEVICECHANGE = 0x0219;

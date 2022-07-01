@@ -77,7 +77,6 @@ namespace oem_nibp_test
             }
         }
 
-
         public void Connect()
         {
             PortNames = GetPortsNames();

@@ -7,13 +7,14 @@ using System.Threading.Tasks;
 namespace oem_nibp_test.enums
 {
     //Masks for Status
+    [Flags]
     internal enum Mask : byte
     {
-        Pump = 0b00000001,
-        Valve = 0b00000010,
-        Msr = 0b00000100,
-        Pulse = 0b00100000,
-        New = 0b01000000,
-        Man8 = 0b10000000,
+        Pump    = 0b_0000_0001,
+        Valve   = 0b_0000_0010,
+        Msr     = 0b_0000_0100,
+        Pulse   = 0b_0010_0000,
+        New     = 0b_0100_0000,
+        Man8    = 0b_1000_0000,
     }
 }
