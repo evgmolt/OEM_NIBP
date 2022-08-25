@@ -14,7 +14,7 @@ namespace oem_nibp_test.enums
         Version = 2,
         Mode = 4, 
         StartPressure = 5,
-        MAP = 6,
+        AveragePressure = 6,
         Pulse = 7,
     }
 }

@@ -123,7 +123,7 @@ namespace oem_nibp_test
             {
                 labPulse.Text = DataFromOEM[(byte)ByteNum.Additional].ToString();
             }
-            if (addIndex == (byte)AdditionalByteIs.MAP)
+            if (addIndex == (byte)AdditionalByteIs.AveragePressure)
             {
                 labMAP.Text = DataFromOEM[(byte)ByteNum.Additional].ToString();
             }
