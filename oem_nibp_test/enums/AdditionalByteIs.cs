@@ -12,8 +12,8 @@ namespace oem_nibp_test.enums
         SerialHigh = 0,
         SerialLow = 1,
         Version = 2,
-        Mode = 4,
-        StartPress = 5,
+        Mode = 4, 
+        StartPressure = 5,
         MAP = 6,
         Pulse = 7,
     }

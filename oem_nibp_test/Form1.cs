@@ -73,9 +73,7 @@ namespace oem_nibp_test
 
         private void timerRead_Tick(object sender, EventArgs e)
         {
-            if (USBPort == null) return;
-            if (USBPort.PortHandle == null) return;
-            if (!USBPort.PortHandle.IsOpen) return;
+            if (USBPort?.PortHandle?.IsOpen == false) return;
             int bytes = USBPort.BytesRead;
             if (bytes > 0)
             {
@@ -188,7 +186,6 @@ namespace oem_nibp_test
                 NextCommand = (byte)CMD.REQUEST;
             }
             timerSendCommand.Enabled = cbAutoRequest.Checked;
-
         }
     }
 }

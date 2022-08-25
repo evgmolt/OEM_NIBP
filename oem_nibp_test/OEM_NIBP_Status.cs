@@ -24,7 +24,7 @@ namespace oem_nibp_test
         public const int Measurement = 3;
         public OEM_NIBP_Status(byte status)
         {
-            Pump =  (status & (byte)Mask.Pump) != 0;
+            Pump = (status & (byte)Mask.Pump) != 0;
             Valve = (status & (byte)Mask.Valve) != 0;
             Msr =   (status & (byte)Mask.Msr) != 0;
             Pulse = (status & (byte)Mask.Pulse) != 0;
