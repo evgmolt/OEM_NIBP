@@ -19,7 +19,7 @@ namespace oem_nibp_test
         public Boolean ReadEnabled;
         readonly System.Threading.Timer ReadTimer;
 
-        private readonly int _portBufSize = 10000;
+        private readonly int _portBufSize = 1000;
         private readonly int _baudRate;
 
         public event Action<Exception> ConnectionFailure;

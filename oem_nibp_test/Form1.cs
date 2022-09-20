@@ -73,18 +73,22 @@ namespace oem_nibp_test
 
         private void timerRead_Tick(object sender, EventArgs e)
         {
-            if (USBPort?.PortHandle?.IsOpen == false) return;
+            if (USBPort?.PortHandle?.IsOpen == false)
+            {
+                return;
+            }
             int bytes = USBPort.BytesRead;
             if (bytes > 0)
             {
-                listBox1.Items.Clear();
                 if (bytes != BytesInResponse)
                 {
                     labDTError.Visible = true;
+                    USBPort.BytesRead = 0;
                     return;
                 }
 
                 labDTError.Visible = false;
+                listBox1.Items.Clear();
                 for (int i = 0; i < bytes; i++)
                 {
                     byte value = USBPort.PortBuf[i];
@@ -98,9 +102,11 @@ namespace oem_nibp_test
 
         private void DecomposeData()
         {
-            if (DataFromOEM[(byte)ByteNum.CheckSum] != GetCheckSum())
+            byte checkSum = GetCheckSum();
+            byte checkSum1 = DataFromOEM[(byte)ByteNum.CheckSum];
+            if (checkSum1 != checkSum)
             {
-//                return;
+                labelCheck.Text = checkSum.ToString() + " " + checkSum1.ToString();
             }
             labSys.Text = DataFromOEM[(byte)ByteNum.SYS].ToString();
             labDia.Text = DataFromOEM[(byte)ByteNum.DIA].ToString();
@@ -141,7 +147,7 @@ namespace oem_nibp_test
         private byte GetCheckSum()
         {
             byte sum = 0;
-            for (int i = 0; i < DataFromOEM.Length; i++)
+            for (int i = 0; i < DataFromOEM.Length - 1; i++)
             {
                 sum += DataFromOEM[i];
             }
@@ -180,6 +186,8 @@ namespace oem_nibp_test
 
         private void timerSendCommand_Tick(object sender, EventArgs e)
         {
+            labError.Text = "";
+            labelCheck.Text = "";
             USBPort.WriteByte(NextCommand);
             if (NextCommand != (byte)CMD.REQUEST)
             {
