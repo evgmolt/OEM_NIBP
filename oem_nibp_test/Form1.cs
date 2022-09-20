@@ -7,10 +7,12 @@ namespace oem_nibp_test
         const byte BytesInResponse = 10;
         byte[] DataFromOEM = new byte[BytesInResponse];
         USBserialPort USBPort;
-        bool Connected;
         OEM_NIBP_Status Status;
         byte Error;
-        byte NextCommand;
+        byte NextCommand = (byte)CMD.REQUEST;
+        int SerialNum;
+        int lowSerialNum;
+        int highSerialNum;
 
         //Masks for Settings
         const byte Mask_Manometer = 0b00010000;
@@ -45,36 +47,15 @@ namespace oem_nibp_test
             base.WndProc(ref m);
         }
 
-        private void timerStatus_Tick(object sender, EventArgs e)
+        private void timerRead_Tick(object sender, EventArgs e)
         {
-            if (USBPort == null)
-            {
-                labPort.Text = "Disconnected";
-                Connected = false;
-                return;
-            }
-            if (USBPort.PortHandle == null)
-            {
-                labPort.Text = "Disconnected";
-                Connected = false;
-                return;
-            }
-            if (USBPort.PortHandle.IsOpen)
+            if (USBPort?.PortHandle?.IsOpen == true)
             {
                 labPort.Text = "Connected to " + USBPort.PortNames[USBPort.CurrentPort];
-                Connected = true;
             }
             else
             {
                 labPort.Text = "Disconnected";
-                Connected = false;
-            }
-        }
-
-        private void timerRead_Tick(object sender, EventArgs e)
-        {
-            if (USBPort?.PortHandle?.IsOpen == false)
-            {
                 return;
             }
             int bytes = USBPort.BytesRead;
@@ -89,12 +70,14 @@ namespace oem_nibp_test
 
                 labDTError.Visible = false;
                 listBox1.Items.Clear();
+
                 for (int i = 0; i < bytes; i++)
                 {
                     byte value = USBPort.PortBuf[i];
                     listBox1.Items.Add(value.ToString());
                     DataFromOEM[i] = value;
                 }
+
                 USBPort.BytesRead = 0;
                 DecomposeData();
             }
@@ -108,6 +91,7 @@ namespace oem_nibp_test
             {
                 labelCheck.Text = checkSum.ToString() + " " + checkSum1.ToString();
             }
+            labelCheck.Text = "";
             labSys.Text = DataFromOEM[(byte)ByteNum.SYS].ToString();
             labDia.Text = DataFromOEM[(byte)ByteNum.DIA].ToString();
             int CurrentPressure = 0x100 * Status.Man8 + DataFromOEM[(byte)ByteNum.Current];
@@ -125,6 +109,19 @@ namespace oem_nibp_test
                 labError.Visible = false;
             }
             byte addIndex = DataFromOEM[(byte)ByteNum.AddIndex];
+            if (addIndex == (byte)AdditionalByteIs.SerialHigh)
+            {
+                highSerialNum = DataFromOEM[(byte)ByteNum.Additional];
+            }
+            if (addIndex == (byte)AdditionalByteIs.SerialLow)
+            {
+                lowSerialNum = DataFromOEM[(byte)ByteNum.Additional];
+                SerialNum = 0x100 * highSerialNum + lowSerialNum;
+            }
+            if (addIndex == (byte)AdditionalByteIs.Version)
+            {
+                labSerial.Text = "Serial number " + SerialNum.ToString() + " Version " + DataFromOEM[(byte)ByteNum.Additional];
+            }
             if (addIndex == (byte)AdditionalByteIs.Pulse)
             {
                 labPulse.Text = DataFromOEM[(byte)ByteNum.Additional].ToString();
@@ -134,7 +131,7 @@ namespace oem_nibp_test
                 labMAP.Text = DataFromOEM[(byte)ByteNum.Additional].ToString();
             }
             labManometer.Visible = (DataFromOEM[(byte)ByteNum.Settings] & Mask_Manometer) != 0;
-            labMeasurement.Text = Status.MeasurementStatus switch
+            labStatus.Text = Status.CurrentStatus switch
             {
                 OEM_NIBP_Status.Ready => "Ready",
                 OEM_NIBP_Status.Calibration => "Calibration",
@@ -186,13 +183,10 @@ namespace oem_nibp_test
 
         private void timerSendCommand_Tick(object sender, EventArgs e)
         {
-            labError.Text = "";
-            labelCheck.Text = "";
+//            labError.Text = "";
+//            labelCheck.Text = "";
             USBPort.WriteByte(NextCommand);
-            if (NextCommand != (byte)CMD.REQUEST)
-            {
-                NextCommand = (byte)CMD.REQUEST;
-            }
+            NextCommand = (byte)CMD.REQUEST;
             timerSendCommand.Enabled = cbAutoRequest.Checked;
         }
     }

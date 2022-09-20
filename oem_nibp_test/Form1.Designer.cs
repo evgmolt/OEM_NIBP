@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.timerStatus = new System.Windows.Forms.Timer(this.components);
             this.labPort = new System.Windows.Forms.Label();
             this.timerRead = new System.Windows.Forms.Timer(this.components);
             this.butRequest = new System.Windows.Forms.Button();
@@ -52,17 +51,12 @@
             this.labManometer = new System.Windows.Forms.Label();
             this.timerSendCommand = new System.Windows.Forms.Timer(this.components);
             this.labHeart = new System.Windows.Forms.Label();
-            this.labMeasurement = new System.Windows.Forms.Label();
+            this.labStatus = new System.Windows.Forms.Label();
             this.labError = new System.Windows.Forms.Label();
             this.cbAutoRequest = new System.Windows.Forms.CheckBox();
             this.labelCheck = new System.Windows.Forms.Label();
+            this.labSerial = new System.Windows.Forms.Label();
             this.SuspendLayout();
-            // 
-            // timerStatus
-            // 
-            this.timerStatus.Enabled = true;
-            this.timerStatus.Interval = 500;
-            this.timerStatus.Tick += new System.EventHandler(this.timerStatus_Tick);
             // 
             // labPort
             // 
@@ -278,15 +272,15 @@
             this.labHeart.Text = "♥";
             this.labHeart.Visible = false;
             // 
-            // labMeasurement
+            // labStatus
             // 
-            this.labMeasurement.AutoSize = true;
-            this.labMeasurement.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.labMeasurement.Location = new System.Drawing.Point(167, 278);
-            this.labMeasurement.Name = "labMeasurement";
-            this.labMeasurement.Size = new System.Drawing.Size(66, 25);
-            this.labMeasurement.TabIndex = 21;
-            this.labMeasurement.Text = "Ready";
+            this.labStatus.AutoSize = true;
+            this.labStatus.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.labStatus.Location = new System.Drawing.Point(167, 278);
+            this.labStatus.Name = "labStatus";
+            this.labStatus.Size = new System.Drawing.Size(66, 25);
+            this.labStatus.TabIndex = 21;
+            this.labStatus.Text = "Ready";
             // 
             // labError
             // 
@@ -318,19 +312,29 @@
             this.labelCheck.AutoSize = true;
             this.labelCheck.Location = new System.Drawing.Point(669, 5);
             this.labelCheck.Name = "labelCheck";
-            this.labelCheck.Size = new System.Drawing.Size(65, 15);
+            this.labelCheck.Size = new System.Drawing.Size(64, 15);
             this.labelCheck.TabIndex = 25;
-            this.labelCheck.Text = "labelCheck";
+            this.labelCheck.Text = "CheckSum";
+            // 
+            // labSerial
+            // 
+            this.labSerial.AutoSize = true;
+            this.labSerial.Location = new System.Drawing.Point(542, 426);
+            this.labSerial.Name = "labSerial";
+            this.labSerial.Size = new System.Drawing.Size(80, 15);
+            this.labSerial.TabIndex = 26;
+            this.labSerial.Text = "Serial number";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.labSerial);
             this.Controls.Add(this.labelCheck);
             this.Controls.Add(this.cbAutoRequest);
             this.Controls.Add(this.labError);
-            this.Controls.Add(this.labMeasurement);
+            this.Controls.Add(this.labStatus);
             this.Controls.Add(this.labHeart);
             this.Controls.Add(this.labManometer);
             this.Controls.Add(this.labMAP);
@@ -359,8 +363,6 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.Timer timerStatus;
         private Label labPort;
         private System.Windows.Forms.Timer timerRead;
         private Button butRequest;
@@ -383,9 +385,10 @@
         private Label labManometer;
         private System.Windows.Forms.Timer timerSendCommand;
         private Label labHeart;
-        private Label labMeasurement;
+        private Label labStatus;
         private Label labError;
         private CheckBox cbAutoRequest;
         private Label labelCheck;
+        private Label labSerial;
     }
 }
