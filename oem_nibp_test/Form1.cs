@@ -11,8 +11,8 @@ namespace oem_nibp_test
         byte Error;
         byte NextCommand = (byte)CMD.REQUEST;
         int SerialNum;
-        int lowSerialNum;
-        int highSerialNum;
+        int LowSerialNum;
+        int HighSerialNum;
 
         //Masks for Settings
         const byte Mask_Manometer = 0b00010000;
@@ -111,12 +111,12 @@ namespace oem_nibp_test
             byte addIndex = DataFromOEM[(byte)ByteNum.AddIndex];
             if (addIndex == (byte)AdditionalByteIs.SerialHigh)
             {
-                highSerialNum = DataFromOEM[(byte)ByteNum.Additional];
+                HighSerialNum = DataFromOEM[(byte)ByteNum.Additional];
             }
             if (addIndex == (byte)AdditionalByteIs.SerialLow)
             {
-                lowSerialNum = DataFromOEM[(byte)ByteNum.Additional];
-                SerialNum = 0x100 * highSerialNum + lowSerialNum;
+                LowSerialNum = DataFromOEM[(byte)ByteNum.Additional];
+                SerialNum = 0x100 * HighSerialNum + LowSerialNum;
             }
             if (addIndex == (byte)AdditionalByteIs.Version)
             {
