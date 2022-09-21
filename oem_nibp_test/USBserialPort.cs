@@ -8,7 +8,7 @@ namespace oem_nibp_test
         event Action<Message> WindowsMessage;
     }
 
-    public class USBserialPort: Form, IMessageHandler
+    public class USBserialPort: IMessageHandler
     {
         private const int _USBTimerInterval = 25;
         public SerialPort PortHandle;

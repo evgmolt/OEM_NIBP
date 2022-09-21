@@ -8,7 +8,6 @@ namespace oem_nibp_test
         byte[] DataFromOEM = new byte[BytesInResponse];
         USBserialPort USBPort;
         OEM_NIBP_Status Status;
-        byte Error;
         byte NextCommand = (byte)CMD.REQUEST;
         int SerialNum;
         int LowSerialNum;
@@ -98,8 +97,12 @@ namespace oem_nibp_test
             int CurrentPressure = 0x100 * Status.Man8 + DataFromOEM[(byte)ByteNum.Current];
             labCurrent.Text = CurrentPressure.ToString();
             Status = new(DataFromOEM[(byte)ByteNum.Status]);
+            if (Status.New)
+            {
+                labNewData.Visible = true;
+            }
             labHeart.Visible = Status.Pulse;
-            Error = DataFromOEM[(byte)ByteNum.Errors];
+            byte Error = DataFromOEM[(byte)ByteNum.Errors];
             if (Error > 0)
             {
                 labError.Visible = true;
@@ -142,7 +145,7 @@ namespace oem_nibp_test
                     byte value = DataFromOEM[(byte)ByteNum.Additional];
                     if (value == 0)
                     {
-                        labStartPressure.Text = "Start pressure : adaptive";
+                        labStartPressure.Text = "Start pressure : Adaptive";
                     }
                     else
                     {
@@ -190,30 +193,33 @@ namespace oem_nibp_test
         {
             NextCommand = (byte)CMD.START;
             timerSendCommand.Enabled = true;
+            labLastCommand.Text = "Last : " + Enum.GetName(typeof(CMD), 0xA1);
+            labNewData.Visible = false;
         }
 
         private void butStop_Click(object sender, EventArgs e)
         {
             NextCommand = (byte)CMD.STOP;
             timerSendCommand.Enabled = true;
+            labLastCommand.Text = "Last : " + Enum.GetName(typeof(CMD), 0xA2);
         }
 
         private void butManometerOn_Click(object sender, EventArgs e)
         {
             NextCommand = (byte)CMD.MAN_ON;
             timerSendCommand.Enabled = true;
+            labLastCommand.Text = "Last : " + Enum.GetName(typeof(CMD), 0xAC);
         }
 
         private void butManometerOff_Click(object sender, EventArgs e)
         {
             NextCommand = (byte)CMD.MAN_OFF;
             timerSendCommand.Enabled = true;
+            labLastCommand.Text = "Last : " + Enum.GetName(typeof(CMD), 0xAD);
         }
 
         private void timerSendCommand_Tick(object sender, EventArgs e)
         {
-//            labError.Text = "";
-//            labelCheck.Text = "";
             USBPort.WriteByte(NextCommand);
             NextCommand = (byte)CMD.REQUEST;
             timerSendCommand.Enabled = cbAutoRequest.Checked;
