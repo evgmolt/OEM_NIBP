@@ -56,6 +56,8 @@
             this.cbAutoRequest = new System.Windows.Forms.CheckBox();
             this.labelCheck = new System.Windows.Forms.Label();
             this.labSerial = new System.Windows.Forms.Label();
+            this.labMode = new System.Windows.Forms.Label();
+            this.labStartPressure = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // labPort
@@ -265,7 +267,7 @@
             this.labHeart.AutoSize = true;
             this.labHeart.Font = new System.Drawing.Font("Segoe UI", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.labHeart.ForeColor = System.Drawing.Color.Red;
-            this.labHeart.Location = new System.Drawing.Point(24, 266);
+            this.labHeart.Location = new System.Drawing.Point(24, 351);
             this.labHeart.Name = "labHeart";
             this.labHeart.Size = new System.Drawing.Size(37, 40);
             this.labHeart.TabIndex = 20;
@@ -276,7 +278,7 @@
             // 
             this.labStatus.AutoSize = true;
             this.labStatus.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.labStatus.Location = new System.Drawing.Point(167, 278);
+            this.labStatus.Location = new System.Drawing.Point(165, 363);
             this.labStatus.Name = "labStatus";
             this.labStatus.Size = new System.Drawing.Size(66, 25);
             this.labStatus.TabIndex = 21;
@@ -325,11 +327,33 @@
             this.labSerial.TabIndex = 26;
             this.labSerial.Text = "Serial number";
             // 
+            // labMode
+            // 
+            this.labMode.AutoSize = true;
+            this.labMode.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.labMode.Location = new System.Drawing.Point(167, 280);
+            this.labMode.Name = "labMode";
+            this.labMode.Size = new System.Drawing.Size(64, 25);
+            this.labMode.TabIndex = 27;
+            this.labMode.Text = "Mode";
+            // 
+            // labStartPressure
+            // 
+            this.labStartPressure.AutoSize = true;
+            this.labStartPressure.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.labStartPressure.Location = new System.Drawing.Point(167, 323);
+            this.labStartPressure.Name = "labStartPressure";
+            this.labStartPressure.Size = new System.Drawing.Size(132, 25);
+            this.labStartPressure.TabIndex = 28;
+            this.labStartPressure.Text = "StartPressure";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.labStartPressure);
+            this.Controls.Add(this.labMode);
             this.Controls.Add(this.labSerial);
             this.Controls.Add(this.labelCheck);
             this.Controls.Add(this.cbAutoRequest);
@@ -390,5 +414,7 @@
         private CheckBox cbAutoRequest;
         private Label labelCheck;
         private Label labSerial;
+        private Label labMode;
+        private Label labStartPressure;
     }
 }

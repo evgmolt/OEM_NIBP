@@ -13,6 +13,7 @@ namespace oem_nibp_test
         int SerialNum;
         int LowSerialNum;
         int HighSerialNum;
+        string Mode = "";
 
         //Masks for Settings
         const byte Mask_Manometer = 0b00010000;
@@ -109,27 +110,55 @@ namespace oem_nibp_test
                 labError.Visible = false;
             }
             byte addIndex = DataFromOEM[(byte)ByteNum.AddIndex];
-            if (addIndex == (byte)AdditionalByteIs.SerialHigh)
+            switch (addIndex)
             {
-                HighSerialNum = DataFromOEM[(byte)ByteNum.Additional];
+                case (byte)AdditionalByteIs.SerialHigh:
+                    HighSerialNum = DataFromOEM[(byte)ByteNum.Additional];
+                    break;
+                case (byte)AdditionalByteIs.SerialLow:
+                    LowSerialNum = DataFromOEM[(byte)ByteNum.Additional];
+                    SerialNum = 0x100 * HighSerialNum + LowSerialNum;
+                    break;
+                case (byte)AdditionalByteIs.Version:
+                    labSerial.Text = "Serial number " + SerialNum.ToString() + " Version " + DataFromOEM[(byte)ByteNum.Additional];
+                    break;
+                case (byte)AdditionalByteIs.Mode:
+                    switch (DataFromOEM[(byte)ByteNum.Additional] & 0x3)
+                    {
+                        case (byte)Modes.Manual:
+                            Mode = "Manual";
+                            break;
+                        case (byte)Modes.Automatic:
+                            Mode = "Automatic";
+                            break;
+                        case (byte)Modes.Stat:
+                            Mode = "Stat";
+                            break;
+                        default:
+                            break;
+                    }
+                    break;
+                case (byte)AdditionalByteIs.StartPressure:
+                    byte value = DataFromOEM[(byte)ByteNum.Additional];
+                    if (value == 0)
+                    {
+                        labStartPressure.Text = "Start pressure : adaptive";
+                    }
+                    else
+                    {
+                        labStartPressure.Text = "Start pressure : " + (80 + 10 * (value - 1)).ToString();
+                    }
+                    break;
+                case (byte)AdditionalByteIs.Pulse:
+                    labPulse.Text = DataFromOEM[(byte)ByteNum.Additional].ToString();
+                    break;
+                case (byte)AdditionalByteIs.AveragePressure:
+                    labMAP.Text = DataFromOEM[(byte)ByteNum.Additional].ToString();
+                    break;
+                default: 
+                    break;
             }
-            if (addIndex == (byte)AdditionalByteIs.SerialLow)
-            {
-                LowSerialNum = DataFromOEM[(byte)ByteNum.Additional];
-                SerialNum = 0x100 * HighSerialNum + LowSerialNum;
-            }
-            if (addIndex == (byte)AdditionalByteIs.Version)
-            {
-                labSerial.Text = "Serial number " + SerialNum.ToString() + " Version " + DataFromOEM[(byte)ByteNum.Additional];
-            }
-            if (addIndex == (byte)AdditionalByteIs.Pulse)
-            {
-                labPulse.Text = DataFromOEM[(byte)ByteNum.Additional].ToString();
-            }
-            if (addIndex == (byte)AdditionalByteIs.AveragePressure)
-            {
-                labMAP.Text = DataFromOEM[(byte)ByteNum.Additional].ToString();
-            }
+            labMode.Text = "Mode : " + Mode;
             labManometer.Visible = (DataFromOEM[(byte)ByteNum.Settings] & Mask_Manometer) != 0;
             labStatus.Text = Status.CurrentStatus switch
             {
